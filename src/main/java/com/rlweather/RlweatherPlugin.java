@@ -1,4 +1,4 @@
-package com.example;
+package com.rlweather;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;
@@ -11,29 +11,40 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.OverlayManager;
+
 
 @Slf4j
 @PluginDescriptor(
-	name = "Example"
+	name = "Weather"
 )
-public class ExamplePlugin extends Plugin
+public class RlweatherPlugin extends Plugin
 {
 	@Inject
 	private Client client;
 
 	@Inject
-	private ExampleConfig config;
+	private RlweatherConfig config;
+
+	@Inject
+	private RlweatherOverlay overlay;
+
+	@Inject
+	private OverlayManager overlayManager;
+
 
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.info("Example started!");
+		log.info("Rlweather started!");
+		overlayManager.add(overlay);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		log.info("Example stopped!");
+		log.info("Rlweather stopped!");
+		overlayManager.remove(overlay);
 	}
 
 	@Subscribe
@@ -41,13 +52,13 @@ public class ExamplePlugin extends Plugin
 	{
 		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
 		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Example says " + config.greeting(), null);
+			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Rlweather says " + config.greeting(), null);
 		}
 	}
 
 	@Provides
-	ExampleConfig provideConfig(ConfigManager configManager)
+	RlweatherConfig provideConfig(ConfigManager configManager)
 	{
-		return configManager.getConfig(ExampleConfig.class);
+		return configManager.getConfig(RlweatherConfig.class);
 	}
 }
