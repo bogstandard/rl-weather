@@ -9,7 +9,7 @@ import java.awt.Color;
 @ConfigGroup("Weather")
 public interface RlweatherConfig extends Config
 {
-	// LIGHTNING
+	// LOCATION AWARENESS
 	@ConfigItem(
 			keyName = "lockedtomusic",
 			name = "Locked to location",
