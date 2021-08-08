@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.sound.sampled.Clip;
+
 import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -26,6 +28,10 @@ public class RlweatherOverlay extends Overlay
 
     // timeouts
     private int lastLightning = 0;
+
+    // audio management
+    boolean rainPlaying = false;
+    Clip rainClip;
 
     // misc
     double chanceOfSpawn = 0.8;
@@ -76,6 +82,13 @@ public class RlweatherOverlay extends Overlay
 
         // RAIN
         if(config.rainEnabled()) {
+
+            // audio management, in an "Overlay?" cmon
+            if(!rainPlaying) {
+                rainPlaying = true;
+                rainClip = Sound.rain();
+            }
+
             // add new rain every tick, if chanced
             if (Math.random() < chanceOfSpawn) {
                 addDrop(rain, image.getWidth(), config.rainColor(), config.rainWind(), config.rainGravity(), config.rainDiv());
@@ -90,7 +103,6 @@ public class RlweatherOverlay extends Overlay
                     continue;
                 }
 
-
                 g.setColor(rainStreak.color);
                 for (int i = 0; i <= config.rainThickness(); i++) {
                     g.drawLine(rainStreak.x1 + i, rainStreak.y1 + i, rainStreak.x2 + i, rainStreak.y2 + i);
@@ -99,6 +111,17 @@ public class RlweatherOverlay extends Overlay
                 // update positions
                 rainStreak.update();
             }
+        }
+
+        else {
+            // this whole bit for audio, yuck
+            try {
+                // TODO stop rain on logout too!!
+                rainClip.stop();
+            } catch (Exception e){
+                // .. bzzt nothing, its already stopped, we hope
+            }
+            rainPlaying = false;
         }
 
         // SNOW
