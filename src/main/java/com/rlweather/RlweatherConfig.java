@@ -33,11 +33,11 @@ public interface RlweatherConfig extends Config
 	@ConfigItem(
 			keyName = "lightningfrequency",
 			name = "Lightning Frequency (WARNING BRIGHT FLASHES)",
-			description = "The rough frequency of the lightning"
+			description = "The rough frequency of the lightning in ticks"
 	)
 	default int lightningFrequency()
 	{
-		return 2500;
+		return 100;
 	}
 	@ConfigItem(
 			keyName = "lightningcolor",

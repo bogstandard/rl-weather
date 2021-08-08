@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
-import javax.sound.sampled.Clip;
 
 import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.Overlay;
@@ -20,18 +19,12 @@ import java.util.Random;
 public class RlweatherOverlay extends Overlay
 {
     private Client client;
-    private RlweatherConfig config;
+    private final RlweatherPlugin plugin;
+    private final RlweatherConfig config;
 
     // collections
     private final LinkedList<Drop> rain = new LinkedList<Drop>();
     private final LinkedList<Drop> snow = new LinkedList<Drop>();
-
-    // timeouts
-    private int lastLightning = 1000;
-
-    // audio management
-    public Sound sound = new Sound();
-    private boolean rainPlaying = false;
 
     // misc
     private double chanceOfSpawn = 0.8;
@@ -46,6 +39,7 @@ public class RlweatherOverlay extends Overlay
         super(plugin);
         setPosition(OverlayPosition.DYNAMIC);
         setLayer(OverlayLayer.ABOVE_SCENE);
+        this.plugin = plugin;
         this.client = client;
         this.config = config;
     }
@@ -57,38 +51,17 @@ public class RlweatherOverlay extends Overlay
         Graphics g = image.getGraphics();
 
         // LIGHTNING
-        if(config.lightningEnabled()) {
+        if(plugin.PERFORM_LIGHTNING) {
+            plugin.PERFORM_LIGHTNING = false; // we only want this lasting 1fr
             g.setColor(config.lightningColor());
-            if(lastLightning <= 0) {
-                Random r = new Random();
-                if(r.nextInt(20) == 0) { // 1/20 chance of lightning when it hits
-
-                    // flash lightning
-                    lastLightning = config.lightningFrequency();
-                    g.fillRect(0, 0, client.getCanvasWidth(), client.getCanvasHeight());
-
-                    // play audio
-                    sound.thunder("thunder");
-                }
-            }
+            g.fillRect(0, 0, client.getCanvasWidth(), client.getCanvasHeight());
         }
 
-        // always count down regardless
-        if(lastLightning > 0) {
-            lastLightning--;
-        } else if(lastLightning < 0) { // safety check
-            lastLightning = 0;
-        }
 
         // RAIN
-        if(config.rainEnabled()) {
+        if(plugin.PERFORM_RAIN) {
 
-            // if not already raining, begin rain sound
-            if(!sound.isPlaying("rain")) {
-                sound.rain("rain");
-            }
-
-            // add new rain every tick, if chanced
+            // maybe add new rain this frame
             if (Math.random() < chanceOfSpawn) {
                 addDrop(rain, image.getWidth(), config.rainColor(), config.rainWind(), config.rainGravity(), config.rainDiv());
             }
@@ -111,12 +84,9 @@ public class RlweatherOverlay extends Overlay
                 rainStreak.update();
             }
         }
-        else {
-            sound.stop("rain");
-        }
 
         // SNOW
-        if(config.snowEnabled()) {
+        if(plugin.PERFORM_SNOW) {
             // add new snow every tick if chanced
             if (Math.random() < chanceOfSpawn) {
                 addDrop(snow, image.getWidth(), config.snowColor(), config.snowWind(), config.snowGravity(), config.snowDiv());
@@ -142,7 +112,7 @@ public class RlweatherOverlay extends Overlay
             }
         }
 
-        // garbage collectors in action
+        // garbage collect spent rain & snow Drops
         rain.removeAll(spentRain);
         snow.removeAll(spentSnow);
 
