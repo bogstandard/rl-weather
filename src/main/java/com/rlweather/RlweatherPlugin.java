@@ -34,17 +34,22 @@ public class RlweatherPlugin extends Plugin
 	@Inject
 	private OverlayManager overlayManager;
 
-	// timeouts
+	// TIMEOUTS
 	public int lastLightning = 10;
 
-	// audio management
+	// AUDIO
 	public Sound sound = new Sound();
 
+	// SOUND KEYS
+	// used to manage the sounds in use
+	protected String KEY_RAIN = "rain";
+	protected String KEY_THUNDER = "thunder";
+
 	// FLAGS FOR RENDER
+	// read by the render method to decide what to do each frame
 	public boolean PERFORM_LIGHTNING = false; // also changed in render for the 1fr quickness
 	public boolean PERFORM_RAIN = false;
 	public boolean PERFORM_SNOW = false;
-	// END FLAGS
 
 	@Override
 	protected void startUp() throws Exception
@@ -83,35 +88,32 @@ public class RlweatherPlugin extends Plugin
 					lastLightning = config.lightningFrequency();
 
 					// play audio
-					sound.thunder("thunder");
+					sound.thunder(KEY_THUNDER);
 				}
 			}
 		}
 		// always count down regardless
 		if(lastLightning > 0) { lastLightning--; }
 		else if(lastLightning < 0) { lastLightning = 0; }
-		// END LIGHTNING
 
 		// RAIN
 		if(config.rainEnabled()) {
 			// set flag to make rain
 			PERFORM_RAIN = true;
 			// if not already raining, begin rain sound
-			if(!sound.isPlaying("rain")) {
-				sound.rain("rain");
+			if(!sound.isPlaying(KEY_RAIN)) {
+				sound.rain(KEY_RAIN);
 			}
 		}
 		else {
-			sound.stop("rain");
+			sound.stop(KEY_RAIN);
 		}
-		// END RAIN
 
 		// SNOW
 		if(config.snowEnabled()) {
 			// set flag to make snow
 			PERFORM_SNOW = true;
 		}
-		// END SNOW
 
 	}
 
