@@ -27,7 +27,7 @@ public class RlweatherOverlay extends Overlay
     private final LinkedList<Drop> snow = new LinkedList<Drop>();
 
     // timeouts
-    private int lastLightning = 0;
+    private int lastLightning = 1000;
 
     // audio management
     boolean rainPlaying = false;
