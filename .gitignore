@@ -7,3 +7,5 @@ build
 nbactions.xml
 nb-configuration.xml
 nbproject/
+src/main/.DS_Store
+src/.DS_Store
