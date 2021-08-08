@@ -1,5 +1,5 @@
 # Weather for OSRS
-Ambient weather effects for your Old School Runescape experience, making it more how you remember it.
+Ambient weather effects for your Old School Runescape experience, making it more how you remember.
 
 ## Features
 - Rain effects (configurable)
