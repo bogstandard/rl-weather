@@ -50,10 +50,13 @@ public class RlweatherPlugin extends Plugin
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
+		// TODO use this snippet later
+		/*
 		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
 		{
 			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Rlweather says " + config.greeting(), null);
 		}
+		*/
 	}
 
 	@Provides
