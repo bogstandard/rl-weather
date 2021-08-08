@@ -84,8 +84,7 @@ public class RlweatherOverlay extends Overlay
         if(config.rainEnabled()) {
 
             // if not already raining, begin rain sound
-            if(!rainPlaying) {
-                rainPlaying = true;
+            if(!sound.isPlaying("rain")) {
                 sound.rain("rain");
             }
 
@@ -114,7 +113,6 @@ public class RlweatherOverlay extends Overlay
         }
         else {
             sound.stop("rain");
-            rainPlaying = false;
         }
 
         // SNOW
