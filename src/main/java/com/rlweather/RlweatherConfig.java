@@ -11,11 +11,21 @@ public interface RlweatherConfig extends Config
 {
 	// LOCATION AWARENESS
 	@ConfigItem(
-			keyName = "lockedtomusic",
-			name = "Locked to location",
+			keyName = "locationenabled",
+			name = "Location Based",
 			description = "eg, it will rain at Barbarian village but snow at Ice Mountain"
 	)
-	default boolean lockedtomusicEnabled()
+	default boolean locationEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+			keyName = "locationconfigenabled",
+			name = "Use Dynamic Location Configs",
+			description = "eg, it will rain heavy at Barbarian village but lighter at Lumbridge"
+	)
+	default boolean locationConfigEnabled()
 	{
 		return true;
 	}

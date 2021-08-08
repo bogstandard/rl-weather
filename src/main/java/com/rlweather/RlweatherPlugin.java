@@ -34,6 +34,11 @@ public class RlweatherPlugin extends Plugin
 	@Inject
 	private OverlayManager overlayManager;
 
+	// LOCATION SNIFFING
+	// use RKGman's fire-beats module to sniff the location via current song
+	public MusicWidgetInfo musicWidgetInfo;
+	public String currentTrack = "";
+
 	// TIMEOUTS
 	public int lastLightning = 10;
 
@@ -74,7 +79,13 @@ public class RlweatherPlugin extends Plugin
 		PERFORM_LIGHTNING = false;
 		PERFORM_RAIN = false;
 		PERFORM_SNOW = false;
-		// END RESET FLAGS
+
+		// LOCATION SNIFFING
+		// TODO use this is a meaningful way, csv to follow config
+		currentTrack = client.getWidget(
+						MusicWidgetInfo.MUSIC_CURRENT_TRACK.getGroupId(),
+						MusicWidgetInfo.MUSIC_CURRENT_TRACK.getChildId())
+				.getText();
 
 		// LIGHTNING
 		if(config.lightningEnabled()) {
