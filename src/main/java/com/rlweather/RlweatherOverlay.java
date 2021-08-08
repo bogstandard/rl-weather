@@ -56,8 +56,13 @@ public class RlweatherOverlay extends Overlay
             if(lastLightning <= 0) {
                 Random r = new Random();
                 if(r.nextInt(20) == 0) { // 1/20 chance of lightning when it hits
+
+                    // flash lightning
                     lastLightning = config.lightningFrequency();
                     g.fillRect(0, 0, client.getCanvasWidth(), client.getCanvasHeight());
+
+                    // play audio
+                    Sound.thunder();
                 }
             }
         }

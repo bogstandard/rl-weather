@@ -37,9 +37,5 @@ Some licences don't require attribution, but I'd like to thank them all anyway.
 ### Thunder
 [MorningGloryProductions, July 25th, 2013](https://freesound.org/people/MorningGloryProductions/sounds/195344/)
 
-### Thunder Rumble Light Rain
-[laft2k, August 16th, 2013](https://freesound.org/people/laft2k/sounds/197259/)
-
 ## Author
-
 This plugin was created by [BogStandard](https://github.com/bogstandard)
