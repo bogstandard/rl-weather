@@ -30,11 +30,11 @@ public class RlweatherOverlay extends Overlay
     private int lastLightning = 1000;
 
     // audio management
-    boolean rainPlaying = false;
-    Clip rainClip;
+    public Sound sound = new Sound();
+    private boolean rainPlaying = false;
 
     // misc
-    double chanceOfSpawn = 0.8;
+    private double chanceOfSpawn = 0.8;
 
     // garbage collectors
     private final List<Drop> spentRain = new ArrayList<Drop>();
@@ -68,7 +68,7 @@ public class RlweatherOverlay extends Overlay
                     g.fillRect(0, 0, client.getCanvasWidth(), client.getCanvasHeight());
 
                     // play audio
-                    Sound.thunder();
+                    sound.thunder("thunder");
                 }
             }
         }
@@ -83,10 +83,10 @@ public class RlweatherOverlay extends Overlay
         // RAIN
         if(config.rainEnabled()) {
 
-            // audio management, in an "Overlay?" cmon
+            // if not already raining, begin rain sound
             if(!rainPlaying) {
                 rainPlaying = true;
-                rainClip = Sound.rain();
+                sound.rain("rain");
             }
 
             // add new rain every tick, if chanced
@@ -112,15 +112,8 @@ public class RlweatherOverlay extends Overlay
                 rainStreak.update();
             }
         }
-
         else {
-            // this whole bit for audio, yuck
-            try {
-                // TODO stop rain on logout too!!
-                rainClip.stop();
-            } catch (Exception e){
-                // .. bzzt nothing, its already stopped, we hope
-            }
+            sound.stop("rain");
             rainPlaying = false;
         }
 

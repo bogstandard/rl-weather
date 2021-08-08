@@ -44,19 +44,20 @@ public class RlweatherPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		log.info("Rlweather stopped!");
+		overlay.sound.stopAll();
 		overlayManager.remove(overlay);
 	}
 
 	@Subscribe
 	public void onGameStateChanged(GameStateChanged gameStateChanged)
 	{
-		// TODO use this snippet later
-		/*
-		if (gameStateChanged.getGameState() == GameState.LOGGED_IN)
-		{
-			client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Rlweather says " + config.greeting(), null);
+		if (gameStateChanged.getGameState() == GameState.LOGIN_SCREEN
+			|| gameStateChanged.getGameState() == GameState.LOGIN_SCREEN_AUTHENTICATOR
+			|| gameStateChanged.getGameState() == GameState.LOGGING_IN
+			|| gameStateChanged.getGameState() == GameState.HOPPING
+			|| gameStateChanged.getGameState() == GameState.CONNECTION_LOST) {
+			overlay.sound.stopAll();
 		}
-		*/
 	}
 
 	@Provides

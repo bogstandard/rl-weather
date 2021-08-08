@@ -11,6 +11,17 @@ public interface RlweatherConfig extends Config
 {
 	// LIGHTNING
 	@ConfigItem(
+			keyName = "lockedtomusic",
+			name = "Locked to location",
+			description = "eg, it will rain at Barbarian village but snow at Ice Mountain"
+	)
+	default boolean lockedtomusicEnabled()
+	{
+		return true;
+	}
+
+	// LIGHTNING
+	@ConfigItem(
 			keyName = "lightningenabled",
 			name = "Lightning Enabled",
 			description = "Is it really horrendous out?"

@@ -1,17 +1,22 @@
 package com.rlweather;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 import javax.sound.sampled.*;
 
 public class Sound {
 
-    public static Clip rain() {
-        return play("177479__unfa__slowly-raining-loop-2.wav", true);
+    private final HashMap<String, Clip> clips = new HashMap<String, Clip>();
+
+    public void rain(String key) {
+        Clip clip = play(key,"177479__unfa__slowly-raining-loop-2.wav", true);
+        subscribe(key, clip);
     }
 
-    public static void thunder() {
+    public void thunder(String key) {
 
         String[] thunderSounds = {
                 "195344__morninggloryproductions__thunder-2.wav",
@@ -21,10 +26,15 @@ public class Sound {
 
         int r = new Random().nextInt(thunderSounds.length);
 
-        play(thunderSounds[r], false);
+        Clip clip = play(key, thunderSounds[r], false);
+        subscribe(key, clip);
     }
 
-    public static Clip play(String soundFilePath, boolean loop) {
+    private void subscribe(String key, Clip clip) {
+        clips.put(key, clip);
+    }
+
+    public Clip play(String key, String soundFilePath, boolean loop) {
         Clip clip = null; // yuck!
 
         try {
@@ -38,6 +48,15 @@ public class Sound {
             format = stream.getFormat();
             info = new DataLine.Info(Clip.class, format);
             clip = (Clip) AudioSystem.getLine(info);
+
+            // callback once sound is completed
+            // removes clip from clips map
+            clip.addLineListener(e -> {
+                if (e.getType() == LineEvent.Type.STOP) {
+                    clips.remove(key);
+                }
+            });
+
             clip.open(stream);
             clip.start();
 
@@ -52,5 +71,20 @@ public class Sound {
         }
 
         return clip;
+    }
+
+    public void stop(String key) {
+        Clip clip = clips.get(key);
+        try {
+            clip.stop();
+        } catch (Exception e) {
+            // bzzt, likely no clip by that key
+        }
+    }
+
+    public void stopAll() {
+        for (String key : clips.keySet()) {
+            stop(key);
+        }
     }
 }
