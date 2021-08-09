@@ -12,7 +12,7 @@ Lightning when enabled delivers some punchy flashes, just like real life.
 Lightning is off by default for safety reasons.
 
 ## Brief
-Weather is something Runescape never had but you might still remember. 
+The Runescape from my childhood had weather, I'm sure of it.
 
 Dreamt up while afk fishing on Barbarian Village's riverbanks; this plugin aims to make that memory reality.
 
@@ -20,6 +20,11 @@ I've tried to keep things old school, so if you want to contribute to the code; 
 
 ## Config
 You can change most things; wind speed, thickness of droplets, dithering (falling sway), colour, speed of falling etc.
+
+## Future Plans
+I'd like to create a location based system, but am at a loss right now how to implement it. Hooking into the music seemed a good idea, but it became ugly fast.
+
+Right now everything is all manual, so remember to disable it when you go to the desert!conf
 
 ## Sound Credits
 This plugin uses sounds generously provided by the creators on [FreeSound.org](https://freesound.org/). 
