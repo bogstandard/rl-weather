@@ -34,11 +34,6 @@ public class RlweatherPlugin extends Plugin
 	@Inject
 	private OverlayManager overlayManager;
 
-	// LOCATION SNIFFING
-	// use RKGman's fire-beats module to sniff the location via current song
-	public MusicWidgetInfo musicWidgetInfo;
-	public String currentTrack = "";
-
 	// TIMEOUTS
 	public int lastLightning = 10;
 
@@ -59,14 +54,14 @@ public class RlweatherPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		log.info("Rlweather started!");
+		log.info("Weather started!");
 		overlayManager.add(overlay);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		log.info("Rlweather stopped!");
+		log.info("Weather stopped!");
 		sound.stopAll();
 		overlayManager.remove(overlay);
 	}
@@ -80,13 +75,6 @@ public class RlweatherPlugin extends Plugin
 		PERFORM_RAIN = false;
 		PERFORM_SNOW = false;
 
-		// LOCATION SNIFFING
-		// TODO use this is a meaningful way, csv to follow config
-		currentTrack = client.getWidget(
-						MusicWidgetInfo.MUSIC_CURRENT_TRACK.getGroupId(),
-						MusicWidgetInfo.MUSIC_CURRENT_TRACK.getChildId())
-				.getText();
-
 		// LIGHTNING
 		if(config.lightningEnabled()) {
 			if(lastLightning <= 0) {
@@ -99,7 +87,9 @@ public class RlweatherPlugin extends Plugin
 					lastLightning = config.lightningFrequency();
 
 					// play audio
-					sound.thunder(KEY_THUNDER);
+					if(config.soundsEnabled()) {
+						sound.thunder(KEY_THUNDER);
+					}
 				}
 			}
 		}
@@ -112,7 +102,7 @@ public class RlweatherPlugin extends Plugin
 			// set flag to make rain
 			PERFORM_RAIN = true;
 			// if not already raining, begin rain sound
-			if(!sound.isPlaying(KEY_RAIN)) {
+			if(!sound.isPlaying(KEY_RAIN) && config.soundsEnabled()) {
 				sound.rain(KEY_RAIN);
 			}
 		}

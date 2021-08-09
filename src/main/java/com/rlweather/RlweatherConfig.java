@@ -9,23 +9,13 @@ import java.awt.Color;
 @ConfigGroup("Weather")
 public interface RlweatherConfig extends Config
 {
-	// LOCATION AWARENESS
+	// SOUND EFFECTS
 	@ConfigItem(
-			keyName = "locationenabled",
-			name = "Location Based",
-			description = "eg, it will rain at Barbarian village but snow at Ice Mountain"
+			keyName = "soundsenabled",
+			name = "Weather Sounds Enabled",
+			description = "Make the noises?"
 	)
-	default boolean locationEnabled()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-			keyName = "locationconfigenabled",
-			name = "Use Dynamic Location Configs",
-			description = "eg, it will rain heavy at Barbarian village but lighter at Lumbridge"
-	)
-	default boolean locationConfigEnabled()
+	default boolean soundsEnabled()
 	{
 		return true;
 	}
@@ -40,6 +30,7 @@ public interface RlweatherConfig extends Config
 	{
 		return false;
 	}
+
 	@ConfigItem(
 			keyName = "lightningfrequency",
 			name = "Lightning Frequency (WARNING BRIGHT FLASHES)",
@@ -49,6 +40,7 @@ public interface RlweatherConfig extends Config
 	{
 		return 100;
 	}
+
 	@ConfigItem(
 			keyName = "lightningcolor",
 			name = "Lightning Color",
@@ -88,7 +80,7 @@ public interface RlweatherConfig extends Config
 	)
 	default int rainThickness()
 	{
-		return 1;
+		return 2;
 	}
 
 	@ConfigItem(
@@ -98,7 +90,7 @@ public interface RlweatherConfig extends Config
 	)
 	default int rainWind()
 	{
-		return 2;
+		return 6;
 	}
 
 	@ConfigItem(
