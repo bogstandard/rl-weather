@@ -14,10 +14,10 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import java.awt.Color;
-import java.util.Random;
 
 public class RlweatherOverlay extends Overlay
 {
+    // general
     private Client client;
     private final RlweatherPlugin plugin;
     private final RlweatherConfig config;
@@ -44,6 +44,11 @@ public class RlweatherOverlay extends Overlay
         this.config = config;
     }
 
+    /**
+     * Render method
+     * Reads the flags set by Plugin and renders what's been asked
+     *
+     */
     @Override
     public Dimension render(Graphics2D graphics) {
 
@@ -52,64 +57,19 @@ public class RlweatherOverlay extends Overlay
 
         // LIGHTNING
         if(plugin.PERFORM_LIGHTNING) {
-            plugin.PERFORM_LIGHTNING = false; // we only want this lasting 1fr
+            plugin.PERFORM_LIGHTNING = false; // we only want this lasting 1fr, reset the flag early
             g.setColor(config.lightningColor());
             g.fillRect(0, 0, client.getCanvasWidth(), client.getCanvasHeight());
         }
 
-
         // RAIN
         if(plugin.PERFORM_RAIN) {
-
-            // maybe add new rain this frame
-            if (Math.random() < chanceOfSpawn) {
-                addDrop(rain, image.getWidth(), config.rainColor(), config.rainWind(), config.rainGravity(), config.rainDiv());
-            }
-
-            // loop existing rain
-            for (Drop rainStreak : rain) {
-
-                // queue remove spent rain (gone offscreen height or width)
-                if (rainStreak.y1 >= image.getHeight() || rainStreak.x1 >= image.getWidth()) {
-                    spentRain.add(rainStreak);
-                    continue;
-                }
-
-                g.setColor(rainStreak.color);
-                for (int i = 0; i <= config.rainThickness(); i++) {
-                    g.drawLine(rainStreak.x1 + i, rainStreak.y1 + i, rainStreak.x2 + i, rainStreak.y2 + i);
-                }
-
-                // update positions
-                rainStreak.update();
-            }
+            renderDrops(rain, spentRain, image, g, "rain");
         }
 
         // SNOW
         if(plugin.PERFORM_SNOW) {
-            // add new snow every tick if chanced
-            if (Math.random() < chanceOfSpawn) {
-                addDrop(snow, image.getWidth(), config.snowColor(), config.snowWind(), config.snowGravity(), config.snowDiv());
-            }
-
-            // loop existing snow
-            for (Drop snowStreak : snow) {
-
-                // queue remove spent rain (gone offscreen height or width)
-                if (snowStreak.y1 >= image.getHeight() || snowStreak.x1 >= image.getWidth()) {
-                    spentSnow.add(snowStreak);
-                    continue;
-                }
-
-                g.setColor(snowStreak.color);
-                for (int i = 0; i <= config.snowThickness(); i++) {
-                    int radius = config.snowThickness() / 2;
-                    g.fillOval(snowStreak.x1 - radius, snowStreak.y1 - radius, config.snowThickness(), config.snowThickness());
-                }
-
-                // update positions
-                snowStreak.update();
-            }
+            renderDrops(snow, spentSnow, image, g, "snow");
         }
 
         // garbage collect spent rain & snow Drops
@@ -122,7 +82,85 @@ public class RlweatherOverlay extends Overlay
         return null;
     }
 
+    /**
+     * addDrop method
+     * Adds a new Drop instance to the given List<Drop>
+     *
+     */
     private void addDrop(List list, int width, Color color, int wind, int gravity, int div) {
         list.add(new Drop(width, color, wind, gravity, div));
+    }
+
+    /**
+     * renderDrops method
+     * Renders Drops from a given list & stores spent ones in a garbage collection List.
+     * If type "rain"; draws a line
+     * If type "snow"; draws an oval
+     *
+     * This method exists to prevent code duplication
+     *
+     */
+    private void renderDrops(List<Drop> drops, List<Drop> spentDrops, BufferedImage image, Graphics g, String type) {
+
+        // drop attrs
+        int thickness;
+        Color color;
+        int wind;
+        int gravity;
+        int div;
+
+        // default to rain
+        thickness = config.rainThickness();
+        color = config.rainColor();
+        wind = config.rainWind();
+        gravity = config.rainGravity();
+        div = config.rainDiv();
+
+        // adjust if snow
+        if(type.equals("snow")) {
+            thickness = config.snowThickness();
+            color = config.snowColor();
+            wind = config.snowWind();
+            gravity = config.snowGravity();
+            div = config.snowDiv();
+        }
+
+        // maybe add new drop this frame
+        if (Math.random() < chanceOfSpawn) {
+            addDrop(drops, image.getWidth(), color, wind, gravity, div);
+        }
+
+        // loop existing Drops
+        for (Drop drop : drops) {
+
+            // queue remove spent Drops (gone offscreen height or width)
+            if (drop.y1 > image.getHeight() || // offscreen down
+                    drop.x1 > image.getWidth() || // offscreen right
+                    drop.y1 < 0 || // offscreen up
+                    drop.x1 < 0) // offscreen left
+            {
+                spentDrops.add(drop); // ready Drop for garbage collection
+                continue;
+            }
+
+            g.setColor(drop.color);
+
+            // if rain draw lines of thickness
+            // drawLine(..) has no means of thickness so loop with offset
+            if(type.equals("rain")) {
+            for (int i = 0; i <= thickness; i++) {
+                    g.drawLine(drop.x1 + i, drop.y1 + i, drop.x2 + i, drop.y2 + i);
+                }
+            }
+
+            // if snow draw oval of thickness
+            if(type.equals("snow")) {
+                int radius = config.snowThickness() / 2;
+                g.fillOval(drop.x1 - radius, drop.y1 - radius, thickness, thickness);
+            }
+
+            // update positions
+            drop.update();
+        }
     }
 }
