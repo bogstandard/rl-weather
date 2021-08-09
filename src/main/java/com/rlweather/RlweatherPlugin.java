@@ -4,7 +4,9 @@ import com.google.inject.Provides;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.Constants;
 import net.runelite.api.GameState;
+import net.runelite.api.Player;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.client.config.ConfigManager;
@@ -45,6 +47,9 @@ public class RlweatherPlugin extends Plugin
 	protected String KEY_RAIN = "rain";
 	protected String KEY_THUNDER = "thunder";
 
+	// GENERAL FLAGS
+	public boolean PLAYER_OUTSIDE = false;
+
 	// FLAGS FOR RENDER
 	// read by the render method to decide what to do each frame
 	public boolean PERFORM_LIGHTNING = false; // also changed in render for the 1fr quickness
@@ -70,10 +75,22 @@ public class RlweatherPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick gameTick) {
 
+		Player player = client.getLocalPlayer();
+		if (player == null)
+		{
+			return; // no player?? bow out early.
+		}
+
+		// UPDATE PLAYER STATUS
+		PLAYER_OUTSIDE = player.getWorldLocation().getY() < Constants.OVERWORLD_MAX_Y;
+
 		// RESET FLAGS
 		PERFORM_LIGHTNING = false;
 		PERFORM_RAIN = false;
 		PERFORM_SNOW = false;
+
+		// RETURN EARLY IF PLAYER NOT OUTSIDE
+		if(!PLAYER_OUTSIDE) return;
 
 		// LIGHTNING
 		if(config.lightningEnabled()) {
