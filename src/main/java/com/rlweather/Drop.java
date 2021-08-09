@@ -1,3 +1,11 @@
+/**
+ * Drop class
+ *
+ * Basic information for a droplet of rain or snow, update()
+ * causes the droplet to fall a little farther.
+ *
+ */
+
 package com.rlweather;
 
 import java.awt.Color;
