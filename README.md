@@ -21,10 +21,12 @@ I've tried to keep things old school, so if you want to contribute to the code; 
 ## Config
 You can change most things; wind speed, thickness of droplets, dithering (falling sway), colour, speed of falling etc.
 
+It *should* pause when you go inside.
+
 ## Future Plans
 I'd like to create a location based system, but am at a loss right now how to implement it. Hooking into the music seemed a good idea, but it became ugly fast.
 
-Right now everything is all manual, so remember to disable it when you go to the desert!conf
+Right now everything is all manual, so remember to disable it when you go to the desert!
 
 ## Sound Credits
 This plugin uses sounds generously provided by the creators on [FreeSound.org](https://freesound.org/). 
