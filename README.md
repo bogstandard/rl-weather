@@ -1,5 +1,5 @@
 # Weather for OSRS
-Ambient weather effects for your Old School Runescape experience, making it more how you remember.
+Ambient weather effects for your Old School Runescape experience.
 
 ## Features
 - Rain effects (configurable)
@@ -12,11 +12,7 @@ Lightning when enabled delivers some punchy flashes, just like real life.
 Lightning is off by default for safety reasons.
 
 ## Brief
-The Runescape from my childhood had weather, I'm sure of it.
-
-Dreamt up while afk fishing on Barbarian Village's riverbanks; this plugin aims to make that memory reality.
-
-I've tried to keep things old school, so if you want to contribute to the code; keep that in mind.
+Dreamt up while afk fishing on Barbarian Village's riverbanks; this plugin will give you rain, thunder and snow. The Runescape from my childhood had weather, I'm sure of it. 
 
 ## Config
 You can change most things; wind speed, thickness of droplets, dithering (falling sway), colour, speed of falling etc.
@@ -24,7 +20,7 @@ You can change most things; wind speed, thickness of droplets, dithering (fallin
 It *should* pause when you go inside.
 
 ## Future Plans
-I'd like to create a location based system, but am at a loss right now how to implement it. Hooking into the music seemed a good idea, but it became ugly fast.
+I'd like to create a location based system, but at a loss right now how to implement it. Advice welcome.
 
 Right now everything is all manual, so remember to disable it when you go to the desert!
 
