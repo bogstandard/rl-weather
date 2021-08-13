@@ -133,6 +133,12 @@ public class RlweatherPlugin extends Plugin
 			PERFORM_SNOW = true;
 		}
 
+		// SOUNDS
+		if(!config.soundsEnabled()) {
+			// stop all sounds immediately if sounds disabled
+			sound.stopAll();
+		}
+
 	}
 
 	@Subscribe
