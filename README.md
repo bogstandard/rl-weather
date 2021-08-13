@@ -7,12 +7,14 @@ Ambient weather effects for your Old School Runescape experience.
 - Lightning effects (configurable)
 - Sound effects for weather types (on/off)
 
+This plugin looks best with the Sky Box set to grey & GPU fog enabled to a thick level.
+
+![demo gif showing rain and snow](https://github.com/bogstandard/rl-weather/blob/master/demo.gif?raw=true)
+
+
 ### Flash Warning
 Lightning when enabled delivers some punchy flashes, just like real life. 
 Lightning is off by default for safety reasons.
-
-## Brief
-Dreamt up while afk fishing on Barbarian Village's riverbanks; this plugin will give you rain, thunder and snow. The Runescape from my childhood had weather, I'm sure of it. 
 
 ## Config
 You can change most things; wind speed, thickness of droplets, dithering (falling sway), colour, speed of falling etc.
@@ -26,19 +28,18 @@ Right now everything is all manual, so remember to disable it when you go to the
 
 ## Sound Credits
 This plugin uses sounds generously provided by the creators on [FreeSound.org](https://freesound.org/). 
-Some licences don't require attribution, but I'd like to thank them all anyway.
+Some of their licences don't require attribution, but I'd like to thank them all anyway. So, thanks!
 
-### Slowly Raining Loop
-[unfa, February 8th, 2013](https://freesound.org/people/unfa/sounds/177479/)
+| Track               | Author                  | URL                                                                 |
+|---------------------|-------------------------|---------------------------------------------------------------------|
+| Slowly Raining Loop | unfa                    | https://freesound.org/people/unfa/sounds/177479/                    |
+| Dry Thunder3        | juskiddink              | https://freesound.org/people/juskiddink/sounds/101948/              |
+| Thunder, Close      | Fission9                | https://freesound.org/people/Fission9/sounds/505113/                |
+| Thunder             | MorningGloryProductions | https://freesound.org/people/MorningGloryProductions/sounds/195344/ |
 
-### Dry Thunder3
-[juskiddink, July 23rd, 2010](https://freesound.org/people/juskiddink/sounds/101948/)
-
-### Thunder, Close
-[Fission9, February 4th, 2020](https://freesound.org/people/Fission9/sounds/505113/)
-
-### Thunder
-[MorningGloryProductions, July 25th, 2013](https://freesound.org/people/MorningGloryProductions/sounds/195344/)
+The bundled tracks have been normalized, shrunk in size and reduced to mono. The originals above are much higher fidelity!
 
 ## Author
-This plugin was created by [BogStandard](https://github.com/bogstandard)
+This plugin was created by [BogStandard](https://github.com/bogstandard).
+
+The Runescape from my childhood had weather, I'm sure of it. 
