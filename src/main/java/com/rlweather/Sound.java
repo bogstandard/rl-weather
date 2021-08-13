@@ -12,15 +12,15 @@ public class Sound {
     private final HashMap<String, Clip> clips = new HashMap<String, Clip>();
 
     public void rain(String key) {
-        Clip clip = play(key,"177479__unfa__slowly-raining-loop-3.wav", true);
+        Clip clip = play(key,"normalized/177479__unfa__slowly-raining-loop-3.wav", true);
         subscribe(key, clip);
     }
 
     public void thunder(String key) {
         String[] thunderSounds = {
-                "195344__morninggloryproductions__thunder-2.wav",
-                "352574__dobroide__20160816-thunder-03-2.wav",
-                "505113__fission9__thunder-close-2.wav"
+                "normalized/195344__morninggloryproductions__thunder-2.wav",
+                "normalized/352574__dobroide__20160816-thunder-03-2.wav",
+                "normalized/505113__fission9__thunder-close-2.wav"
         };
 
         int r = new Random().nextInt(thunderSounds.length);
