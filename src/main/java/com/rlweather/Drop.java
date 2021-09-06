@@ -39,7 +39,12 @@ public class Drop {
         this.x2 = this.x1;
         this.y2 = this.y1;
 
-        this.x1 += this.wind + r.nextInt(this.div + this.div) - this.div; // -div to div
+        this.x1 += this.wind;
+        if (this.div > 0)
+        {
+            this.x1 += r.nextInt(this.div + this.div) - this.div; // -div to div
+        }
+
         this.y1 += this.gravity;
     }
 }
