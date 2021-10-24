@@ -1,10 +1,7 @@
 package com.rlweather;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,16 +20,11 @@ public class RlweatherOverlay extends Overlay
     private final RlweatherConfig config;
 
     // collections
-    private final LinkedList<Drop> rain = new LinkedList<Drop>();
-    private final LinkedList<Drop> snow = new LinkedList<Drop>();
+    private final List<Drop> rain = new LinkedList<>();
+    private final List<Drop> snow = new LinkedList<>();
 
     // misc
     private double chanceOfSpawn = 0.8;
-
-    // garbage collectors
-    private final List<Drop> spentRain = new ArrayList<Drop>();
-    private final List<Drop> spentSnow = new ArrayList<Drop>();
-
 
     @Inject
     public RlweatherOverlay(Client client, RlweatherPlugin plugin, RlweatherConfig config) {
@@ -52,32 +44,24 @@ public class RlweatherOverlay extends Overlay
     @Override
     public Dimension render(Graphics2D graphics) {
 
-        BufferedImage image = new BufferedImage(client.getCanvasWidth(), client.getCanvasHeight(), BufferedImage.TYPE_4BYTE_ABGR);
-        Graphics g = image.getGraphics();
+        Dimension canvasDim = client.getRealDimensions();
 
         // LIGHTNING
         if(plugin.PERFORM_LIGHTNING) {
             plugin.PERFORM_LIGHTNING = false; // we only want this lasting 1fr, reset the flag early
-            g.setColor(config.lightningColor());
-            g.fillRect(0, 0, client.getCanvasWidth(), client.getCanvasHeight());
+            graphics.setColor(config.lightningColor());
+            graphics.fillRect(0, 0, canvasDim.width, canvasDim.height);
         }
 
         // RAIN
         if(plugin.PERFORM_RAIN) {
-            renderDrops(rain, spentRain, image, g, "rain");
+            renderDrops(rain, canvasDim, graphics, "rain");
         }
 
         // SNOW
         if(plugin.PERFORM_SNOW) {
-            renderDrops(snow, spentSnow, image, g, "snow");
+            renderDrops(snow, canvasDim, graphics, "snow");
         }
-
-        // garbage collect spent rain & snow Drops
-        rain.removeAll(spentRain);
-        snow.removeAll(spentSnow);
-
-        // render everything
-        graphics.drawImage(image, 0, 0, null);
 
         return null;
     }
@@ -87,7 +71,7 @@ public class RlweatherOverlay extends Overlay
      * Adds a new Drop instance to the given List<Drop>
      *
      */
-    private void addDrop(List list, int width, Color color, int wind, int gravity, int div) {
+    private void addDrop(List<Drop> list, int width, Color color, int wind, int gravity, int div) {
         list.add(new Drop(width, color, wind, gravity, div));
     }
 
@@ -100,7 +84,7 @@ public class RlweatherOverlay extends Overlay
      * This method exists to prevent code duplication
      *
      */
-    private void renderDrops(List<Drop> drops, List<Drop> spentDrops, BufferedImage image, Graphics g, String type) {
+    private void renderDrops(List<Drop> drops, Dimension c, Graphics2D g, String type) {
 
         // drop attrs
         int thickness;
@@ -127,22 +111,11 @@ public class RlweatherOverlay extends Overlay
 
         // maybe add new drop this frame
         if (Math.random() < chanceOfSpawn) {
-            addDrop(drops, image.getWidth(), color, wind, gravity, div);
+            addDrop(drops, c.width, color, wind, gravity, div);
         }
 
         // loop existing Drops
         for (Drop drop : drops) {
-
-            // queue remove spent Drops (gone offscreen height or width)
-            if (drop.y1 > image.getHeight() || // offscreen down
-                    drop.x1 > image.getWidth() || // offscreen right
-                    drop.y1 < 0 || // offscreen up
-                    drop.x1 < 0) // offscreen left
-            {
-                spentDrops.add(drop); // ready Drop for garbage collection
-                continue;
-            }
-
             g.setColor(drop.color);
 
             // if rain draw lines of thickness
@@ -162,5 +135,13 @@ public class RlweatherOverlay extends Overlay
             // update positions
             drop.update();
         }
+
+        // remove spent drops
+        drops.removeIf(drop ->
+            drop.y1 > c.height || // offscreen down
+            drop.x1 > c.width || // offscreen right
+            drop.y1 < 0 || // offscreen up
+            drop.x1 < -c.width / 2 // offscreen left, account for spawning outside bounds in Drop.java
+        );
     }
 }
