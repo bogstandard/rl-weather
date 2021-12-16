@@ -3,12 +3,13 @@ package com.rlweather;
 import com.google.inject.Provides;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Client;
-import net.runelite.api.Constants;
-import net.runelite.api.GameState;
-import net.runelite.api.Player;
+import net.runelite.api.*;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
+import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.chat.ChatMessageBuilder;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -36,6 +37,9 @@ public class RlweatherPlugin extends Plugin
 	@Inject
 	private OverlayManager overlayManager;
 
+	@Inject
+	private ChatMessageManager chatMessageManager;
+
 	// TIMEOUTS
 	public int lastLightning = 10;
 
@@ -56,11 +60,15 @@ public class RlweatherPlugin extends Plugin
 	public boolean PERFORM_RAIN = false;
 	public boolean PERFORM_SNOW = false;
 
+	// Location variables
+	public WeatherAPI weatherAPI = new WeatherAPI();
+
 	@Override
 	protected void startUp() throws Exception
 	{
 		log.info("Weather started!");
 		overlayManager.add(overlay);
+		weatherAPI.setChatMessageManager(chatMessageManager);
 	}
 
 	@Override
@@ -71,10 +79,30 @@ public class RlweatherPlugin extends Plugin
 		overlayManager.remove(overlay);
 	}
 
+	private boolean isLightningEnabled() {
+		if(config.locationEnabled()) {
+			return config.lightningEnabled() && weatherAPI.isThundering();
+		} else {
+			return config.lightningEnabled();
+		}
+	}
+	private boolean isRainEnabled() {
+		if(config.locationEnabled()) {
+			return config.rainEnabled() && weatherAPI.isRaining();
+		} else {
+			return config.rainEnabled();
+		}
+	}
+	private boolean isSnowEnabled() {
+		if(config.locationEnabled()) {
+			return config.snowEnabled() && weatherAPI.isSnowing();
+		} else {
+			return config.snowEnabled();
+		}
+	}
 
 	@Subscribe
 	public void onGameTick(GameTick gameTick) {
-
 		Player player = client.getLocalPlayer();
 		if (player == null)
 		{
@@ -92,8 +120,14 @@ public class RlweatherPlugin extends Plugin
 		// RETURN EARLY IF PLAYER NOT OUTSIDE
 		if(!PLAYER_OUTSIDE) return;
 
+		if(config.locationEnabled()) {
+			weatherAPI.setApiKey(config.apiKey());
+			weatherAPI.setLocation(config.location());
+			weatherAPI.update();
+		}
+
 		// LIGHTNING
-		if(config.lightningEnabled()) {
+		if(isLightningEnabled()) {
 			if(lastLightning <= 0) {
 				Random r = new Random();
 				if(r.nextInt(20) == 0) { // 1/20 chance of lightning when it hits
@@ -115,7 +149,7 @@ public class RlweatherPlugin extends Plugin
 		else if(lastLightning < 0) { lastLightning = 0; }
 
 		// RAIN
-		if(config.rainEnabled()) {
+		if(isRainEnabled()) {
 			// set flag to make rain
 			PERFORM_RAIN = true;
 			// if not already raining, begin rain sound
@@ -128,7 +162,7 @@ public class RlweatherPlugin extends Plugin
 		}
 
 		// SNOW
-		if(config.snowEnabled()) {
+		if(isSnowEnabled()) {
 			// set flag to make snow
 			PERFORM_SNOW = true;
 		}

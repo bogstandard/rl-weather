@@ -189,4 +189,38 @@ public interface RlweatherConfig extends Config
 	{
 		return 3;
 	}
+
+	// Location Weather
+	@ConfigItem(
+			position = 17,
+			keyName = "locationenabled",
+			name = "Location Enabled",
+			description = "Load live weather updates for your location?"
+	)
+	default boolean locationEnabled()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 18,
+			keyName = "location",
+			name = "Location",
+			description = "Location for live weather updates, supports zip code, city name, city name and country code, etc. See formats here https://openweathermap.org/current#one"
+	)
+	default String location()
+	{
+		return "";
+	}
+
+	@ConfigItem(
+			position = 19,
+			keyName = "apiKey",
+			name = "Api Key",
+			description = "OpenWeatherMap API key for live weather updates. Create a free key here https://openweathermap.org/api"
+	)
+	default String apiKey()
+	{
+		return "";
+	}
 }
