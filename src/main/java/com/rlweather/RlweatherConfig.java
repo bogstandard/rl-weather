@@ -194,8 +194,8 @@ public interface RlweatherConfig extends Config
 	@ConfigItem(
 			position = 17,
 			keyName = "locationenabled",
-			name = "Location Enabled",
-			description = "Load live weather updates for your location?"
+			name = "Real World Location Matching",
+			description = "Match the weather to a real world location?"
 	)
 	default boolean locationEnabled()
 	{
@@ -205,8 +205,8 @@ public interface RlweatherConfig extends Config
 	@ConfigItem(
 			position = 18,
 			keyName = "location",
-			name = "Location",
-			description = "Location for live weather updates, supports zip code, city name, city name and country code, etc. See formats here https://openweathermap.org/current#one"
+			name = "Real World Location",
+			description = "City name or Area name, eg. London, UK. Changes take effect after 3 minutes."
 	)
 	default String location()
 	{
@@ -216,8 +216,8 @@ public interface RlweatherConfig extends Config
 	@ConfigItem(
 			position = 19,
 			keyName = "apiKey",
-			name = "Api Key",
-			description = "OpenWeatherMap API key for live weather updates. Create a free key here https://openweathermap.org/api"
+			name = "OpenWeatherMap API Key",
+			description = "Required for locational weather. Create free key at openweathermap.org/api"
 	)
 	default String apiKey()
 	{
