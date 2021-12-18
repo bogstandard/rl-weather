@@ -39,7 +39,7 @@ public class WeatherAPI {
     private Optional<Boolean> isHealthy = Optional.empty();
 
     private interface WeatherApiService {
-        @GET("data/2.5/forecast")
+        @GET("data/2.5/weather")
         Call<WeatherModel> requestWeather(@Header("x-api-key") String apiKey, @Query("q") String location, @Query("units") String units, @Query("cnt") String count);
     }
 
@@ -95,17 +95,15 @@ public class WeatherAPI {
             weatherApiService.requestWeather(apiKey, location, "metric", "10").enqueue(new Callback<WeatherModel>() {
                 @Override
                 public void onResponse(Call<WeatherModel> call, Response<WeatherModel> response) {
-                    log.debug(call.toString(), response.toString());
+                    log.info(call.toString(), response.body().toString());
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
-                            log.debug(response.raw().toString());
-                            List<WeatherModel.WeatherList.Weather> weatherEntries = response.body().getList().stream().flatMap(weatherItem -> weatherItem.getWeather().stream()).collect(Collectors.toList());
-                            weatherEntries.forEach(entry -> log.debug(entry.getId().toString()));
-                            isRaining = weatherEntries.stream().anyMatch(WeatherModel.WeatherList.Weather::isRainingFromID);
-                            isSnowing = weatherEntries.stream().anyMatch(WeatherModel.WeatherList.Weather::isSnowingFromID);
-                            isThundering = weatherEntries.stream().anyMatch(WeatherModel.WeatherList.Weather::isThunderingFromID);
+                            WeatherModel weatherModel = response.body();
+                            isRaining = weatherModel.getWeather().isRainingFromID();
+                            isSnowing = weatherModel.getWeather().isSnowingFromID();
+                            isThundering = weatherModel.getWeather().isThunderingFromID();
                             if(!isHealthy.orElse(false)) {
-                                sendMessage("Now connected to weather in "+location);
+                                sendMessage("Now connected to weather in "+ location);
                             }
                             isHealthy = Optional.of(true);
                             log.debug("Updated weather --\n" +
