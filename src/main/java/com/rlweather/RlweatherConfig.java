@@ -12,7 +12,7 @@ public interface RlweatherConfig extends Config
 	@ConfigItem(
 			position = 1,
 			keyName = "soundsenabled",
-			name = "Weather Sounds Enabled",
+			name = "Weather Sounds Enabled (beta)",
 			description = "Make the noises?"
 	)
 	default boolean soundsEnabled()

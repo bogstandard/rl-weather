@@ -1,26 +1,29 @@
 package com.rlweather;
 
+import lombok.extern.slf4j.Slf4j;
 import java.io.*;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 import javax.sound.sampled.*;
 
+@Slf4j
 public class Sound {
 
     private final HashMap<String, Clip> clips = new HashMap<String, Clip>();
 
     public void rain(String key) {
-        Clip clip = play(key,"normalized/177479__unfa__slowly-raining-loop-3.wav", true);
+        Clip clip = play(key,"/normalized/177479__unfa__slowly-raining-loop-3.wav", true);
         subscribe(key, clip);
     }
 
     public void thunder(String key) {
         String[] thunderSounds = {
-                "normalized/195344__morninggloryproductions__thunder-2.wav",
-                "normalized/352574__dobroide__20160816-thunder-03-2.wav",
-                "normalized/505113__fission9__thunder-close-2.wav"
+                "/normalized/195344__morninggloryproductions__thunder-2.wav",
+                "/normalized/352574__dobroide__20160816-thunder-03-2.wav",
+                "/normalized/505113__fission9__thunder-close-2.wav"
         };
 
         int r = new Random().nextInt(thunderSounds.length);
@@ -37,16 +40,9 @@ public class Sound {
         Clip clip = null; // yuck!
 
         try {
-            String filePath = Objects.requireNonNull(Sound.class.getClassLoader().getResource(soundFilePath)).getPath();
-            File soundFile = new File(filePath);
-            AudioInputStream stream;
-            AudioFormat format;
-            DataLine.Info info;
-
-            stream = AudioSystem.getAudioInputStream(soundFile);
-            format = stream.getFormat();
-            info = new DataLine.Info(Clip.class, format);
-            clip = (Clip) AudioSystem.getLine(info);
+            InputStream is = getClass().getResourceAsStream(soundFilePath);
+            AudioInputStream stream = AudioSystem.getAudioInputStream(is);
+            clip = AudioSystem.getClip();
 
             // callback once sound is completed
             // removes clip from clips map
@@ -66,7 +62,7 @@ public class Sound {
             return clip;
         }
         catch (Exception e) {
-            System.out.println(e);
+            log.warn("Failed to play sound: " + soundFilePath, e);
         }
 
         return clip;
