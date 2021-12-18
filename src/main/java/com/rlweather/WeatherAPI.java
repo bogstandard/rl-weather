@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WeatherAPI {
     public final String URL = "http://api.openweathermap.org/";
-    private final int MAX_STALENESS = 3600; // Gameticks are ~0.6sec, 3600 ~= every half hour
-                                            // Roughly req 1460 a month if continuous play.
+    private final int MAX_STALENESS = 360; // Gameticks are ~0.6sec, 600 ~= every 3 minutes
+                                            // Roughly req 14600 a month if continuous play.
                                             // (don't ever get near free api rate limits)
                                             // see https://openweathermap.org/price
                                             // we must be careful here!
