@@ -21,10 +21,11 @@ You can change most things; wind speed, thickness of droplets, dithering (fallin
 
 It *should* pause when you go inside.
 
-## Future Plans
-I'd like to create a location based system, but at a loss right now how to implement it. Advice welcome.
+## Recent Activity & Future Plans
+- **Real world location matching** is [coming soon](https://github.com/bogstandard/rl-weather/pull/5).
+- **Broken sound effects** are being fixed (slowly).
+- **in-game location matching** is being considered, eg. Barbarian Village should be rainy.
 
-Right now everything is all manual, so remember to disable it when you go to the desert!
 
 ## Sound Credits
 This plugin uses sounds generously provided by the creators on [FreeSound.org](https://freesound.org/). 
