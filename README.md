@@ -21,6 +21,9 @@ You can change most things; wind speed, thickness of droplets, dithering (fallin
 
 It *should* pause when you go inside.
 
+## Call for Help!
+Currently the sound effects are broken on the plugin-hub production build, but work when in development. If anyone's able to assist with this problem, please get involved! I'm at a loss & reckon there's something obvious I'm missing.
+
 ## Recent Activity & Future Plans
 - **Real world location matching** is [coming soon](https://github.com/bogstandard/rl-weather/pull/5).
 - **Broken sound effects** are being fixed (slowly).
