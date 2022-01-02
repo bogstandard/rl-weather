@@ -25,8 +25,7 @@ It *should* pause when you go inside.
 Currently the sound effects are broken on the plugin-hub production build, but work when in development. If anyone's able to assist with this problem, please get involved! I'm at a loss & reckon there's something obvious I'm missing.
 
 ## Recent Activity & Future Plans
-- **Real world location matching** is [coming soon](https://github.com/bogstandard/rl-weather/pull/5).
-- **Broken sound effects** are being fixed (slowly).
+- **Broken sound effects** are being fixed (slowly), **help is really wanted here.**.
 - **in-game location matching** is being considered, eg. Barbarian Village should be rainy.
 
 
