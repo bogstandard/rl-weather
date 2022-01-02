@@ -189,4 +189,38 @@ public interface RlweatherConfig extends Config
 	{
 		return 3;
 	}
+
+	// Location Weather
+	@ConfigItem(
+			position = 17,
+			keyName = "locationenabled",
+			name = "Real World Location Matching",
+			description = "Match the weather to a real world location?"
+	)
+	default boolean locationEnabled()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 18,
+			keyName = "location",
+			name = "Real World Location",
+			description = "City name or Area name, eg. London, UK. Changes take effect after 3 minutes."
+	)
+	default String location()
+	{
+		return "";
+	}
+
+	@ConfigItem(
+			position = 19,
+			keyName = "apiKey",
+			name = "OpenWeatherMap API Key",
+			description = "Required for locational weather. Create free key at openweathermap.org/api"
+	)
+	default String apiKey()
+	{
+		return "";
+	}
 }
