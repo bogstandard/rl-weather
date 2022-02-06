@@ -105,7 +105,7 @@ public class WeatherAPI {
                                 sendMessage("Now connected to weather in "+ location);
                             }
                             isHealthy = Optional.of(true);
-                            log.info("Updated weather --\n" +
+                            log.debug("Updated weather --\n" +
                                     "isRaining: " + isRaining() + "\n" +
                                     "isSnowing: " + isSnowing() + "\n" +
                                     "isThundering: " + isThundering() + "\n");
