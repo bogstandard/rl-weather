@@ -1,29 +1,21 @@
 package com.rlweather;
 
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Query;
 
-import javax.swing.text.html.Option;
+import okhttp3.*;
+
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class WeatherAPI {
-    public final String URL = "http://api.openweathermap.org/";
+    public final String URL = "http://api.openweathermap.org/data/2.5/weather";
     private final int MAX_STALENESS = 360; // Gameticks are ~0.6sec, 600 ~= every 3 minutes
                                             // Roughly req 14600 a month if continuous play.
                                             // (don't ever get near free api rate limits)
@@ -37,11 +29,6 @@ public class WeatherAPI {
     private boolean isRaining = false;
     private boolean isThundering = false;
     private Optional<Boolean> isHealthy = Optional.empty();
-
-    private interface WeatherApiService {
-        @GET("data/2.5/weather")
-        Call<WeatherModel> requestWeather(@Header("x-api-key") String apiKey, @Query("q") String location, @Query("units") String units, @Query("cnt") String count);
-    }
 
     public WeatherAPI() {
         log.debug("Weather API starting");
@@ -84,21 +71,33 @@ public class WeatherAPI {
             return;
         } else if(staleness > MAX_STALENESS) {
             log.debug("Weather data stale, refreshing from API");
-            // update weather here
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(URL) //This is the only mandatory call on Builder object.
-                    .addConverterFactory(GsonConverterFactory.create()) // Convertor library used to convert response into POJO
+
+            HttpUrl httpUrl = new HttpUrl.Builder()
+                    .scheme("https")
+                    .host("api.openweathermap.org")
+                    .addPathSegment("data")
+                    .addPathSegment("2.5")
+                    .addPathSegment("weather")
+                    .addQueryParameter("q", location)
+                    .addQueryParameter("units", "metric")
+                    .addQueryParameter("cnt", "10")
                     .build();
 
-            WeatherApiService weatherApiService = retrofit.create(WeatherApiService.class);
+            OkHttpClient client = new OkHttpClient();
+            Request getRequest = new Request.Builder()
+                    .url(httpUrl)
+                    .header("x-api-key", apiKey)
+                    .build();
 
-            weatherApiService.requestWeather(apiKey, location, "metric", "10").enqueue(new Callback<WeatherModel>() {
+            client.newCall(getRequest).enqueue(new Callback() {
                 @Override
-                public void onResponse(Call<WeatherModel> call, Response<WeatherModel> response) {
+                public void onResponse(Call call, Response response) throws IOException {
                     log.info(call.toString(), response.body().toString());
+
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
-                            WeatherModel weatherModel = response.body();
+                            Gson gson = new Gson();
+                            WeatherModel weatherModel = gson.fromJson(response.body().string(), WeatherModel.class);
                             isRaining = weatherModel.getWeather().isRainingFromID();
                             isSnowing = weatherModel.getWeather().isSnowingFromID();
                             isThundering = weatherModel.getWeather().isThunderingFromID();
@@ -106,7 +105,7 @@ public class WeatherAPI {
                                 sendMessage("Now connected to weather in "+ location);
                             }
                             isHealthy = Optional.of(true);
-                            log.debug("Updated weather --\n" +
+                            log.info("Updated weather --\n" +
                                     "isRaining: " + isRaining() + "\n" +
                                     "isSnowing: " + isSnowing() + "\n" +
                                     "isThundering: " + isThundering() + "\n");
@@ -117,7 +116,7 @@ public class WeatherAPI {
                         log.error("Responded with error code: " + response.code());
                         String error = "";
                         try {
-                            error = response.errorBody().string();
+                            error = response.body().string();
                             log.error(error);
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -136,12 +135,14 @@ public class WeatherAPI {
                             isHealthy = Optional.of(false);
                         }
                     }
+                    response.close();
                 }
 
                 @Override
-                public void onFailure(Call<WeatherModel> call, Throwable t) {
+                public void onFailure(Call call, IOException e) {
                     log.error("Error in call" + call.toString());
-                    log.error(t.toString());
+                    log.error(e.toString());
+                    e.printStackTrace();
                 }
             });
 

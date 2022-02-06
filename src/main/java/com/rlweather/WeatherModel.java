@@ -9,8 +9,6 @@ public class WeatherModel {
     // openweather returns an array of one weather item
     // catch it but then return only the first
     // kinda confusing but shortens the codebase hugely
-    @SerializedName("weather")
-    @Expose
     private List<Weather> weather;
 
     public Weather getWeather() {
@@ -22,8 +20,6 @@ public class WeatherModel {
     }
 
     public class Weather {
-        @SerializedName("id")
-        @Expose
         private int id;
 
         public int getId() {
