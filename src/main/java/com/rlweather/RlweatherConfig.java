@@ -206,7 +206,7 @@ public interface RlweatherConfig extends Config
 			position = 18,
 			keyName = "location",
 			name = "Real World Location",
-			description = "City name or Area name, eg. London, UK. Changes take effect after 3 minutes."
+			description = "City name or Area name, <br>eg. London, UK. Changes take effect after 3 minutes."
 	)
 	default String location()
 	{
@@ -217,7 +217,7 @@ public interface RlweatherConfig extends Config
 			position = 19,
 			keyName = "apiKey",
 			name = "OpenWeatherMap API Key",
-			description = "Required for locational weather. Create free key at openweathermap.org/api"
+			description = "Required for locational weather. <br>Create free key at openweathermap.org/api"
 	)
 	default String apiKey()
 	{
