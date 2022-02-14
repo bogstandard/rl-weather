@@ -12,6 +12,7 @@ import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -98,6 +99,21 @@ public class RlweatherPlugin extends Plugin
 			return config.snowEnabled() && weatherAPI.isSnowing();
 		} else {
 			return config.snowEnabled();
+		}
+	}
+
+	@Subscribe
+	private void onConfigChanged(ConfigChanged event) {
+		if (!event.getGroup().equals("Weather") || !config.locationEnabled()) {
+			return;
+		}
+
+		if (event.getKey().equals("locationenabled") ||
+			event.getKey().equals("location") ||
+			event.getKey().equals("apiKey") ) {
+			weatherAPI.setApiKey(config.apiKey());
+			weatherAPI.setLocation(config.location());
+			weatherAPI.zeroStaleness();
 		}
 	}
 

@@ -206,7 +206,7 @@ public interface RlweatherConfig extends Config
 			position = 18,
 			keyName = "location",
 			name = "Real World Location",
-			description = "City name or Area name, <br>eg. London, UK. Changes take effect after 3 minutes."
+			description = "City name or Area name, <br>eg. London, UK <br>Changes take effect on click elsewhere"
 	)
 	default String location()
 	{
