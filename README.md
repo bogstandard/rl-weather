@@ -27,6 +27,7 @@ Currently the sound effects are broken on the plugin-hub production build, but w
 ## Recent Activity & Future Plans
 - **Broken sound effects** are being fixed (slowly), **help is really wanted here.**.
 - **in-game location matching** is being considered, eg. Barbarian Village should be rainy.
+- **3D style droplets** is being experimented with, please refer to the [Issue thread](https://github.com/bogstandard/rl-weather/issues/9#issue-1162733353)
 
 
 ## Sound Credits
