@@ -16,6 +16,7 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+import okhttp3.OkHttpClient;
 
 import java.util.Random;
 
@@ -41,6 +42,9 @@ public class RlweatherPlugin extends Plugin
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
+	@Inject
+	private WeatherAPI weatherAPI;
+
 	// TIMEOUTS
 	public int lastLightning = 10;
 
@@ -60,9 +64,6 @@ public class RlweatherPlugin extends Plugin
 	public boolean PERFORM_LIGHTNING = false; // also changed in render for the 1fr quickness
 	public boolean PERFORM_RAIN = false;
 	public boolean PERFORM_SNOW = false;
-
-	// Location variables
-	public WeatherAPI weatherAPI = new WeatherAPI();
 
 	@Override
 	protected void startUp() throws Exception

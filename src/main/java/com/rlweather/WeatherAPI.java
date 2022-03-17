@@ -10,6 +10,7 @@ import net.runelite.client.chat.QueuedMessage;
 
 import okhttp3.*;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -28,8 +29,11 @@ public class WeatherAPI {
     private boolean isRaining = false;
     private boolean isThundering = false;
     private Optional<Boolean> isHealthy = Optional.empty();
+    private OkHttpClient okHttpClient;
 
-    public WeatherAPI() {
+    @Inject
+    private WeatherAPI(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
         log.debug("Weather API starting");
     }
 
@@ -86,13 +90,12 @@ public class WeatherAPI {
                     .addQueryParameter("cnt", "10")
                     .build();
 
-            OkHttpClient client = new OkHttpClient();
             Request getRequest = new Request.Builder()
                     .url(httpUrl)
                     .header("x-api-key", apiKey)
                     .build();
 
-            client.newCall(getRequest).enqueue(new Callback() {
+            okHttpClient.newCall(getRequest).enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     log.info(call.toString(), response.body().toString());
