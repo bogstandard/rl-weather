@@ -97,7 +97,7 @@ public class WeatherAPI {
 
             Request getRequest = new Request.Builder()
                     .url(httpUrl)
-                    .header("User-Agent", RuneLite.USER_AGENT)
+                    .header("User-Agent", RuneLite.USER_AGENT + " (rl-weather")
                     .header("x-api-key", apiKey)
                     .build();
 
