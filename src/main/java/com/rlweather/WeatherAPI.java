@@ -3,12 +3,17 @@ package com.rlweather;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
-import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.RuneLite;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -92,6 +97,7 @@ public class WeatherAPI {
 
             Request getRequest = new Request.Builder()
                     .url(httpUrl)
+                    .header("User-Agent", RuneLite.USER_AGENT)
                     .header("x-api-key", apiKey)
                     .build();
 
