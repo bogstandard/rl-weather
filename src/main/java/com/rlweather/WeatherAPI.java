@@ -3,13 +3,19 @@ package com.rlweather;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
-import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.RuneLite;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -28,8 +34,11 @@ public class WeatherAPI {
     private boolean isRaining = false;
     private boolean isThundering = false;
     private Optional<Boolean> isHealthy = Optional.empty();
+    private OkHttpClient okHttpClient;
 
-    public WeatherAPI() {
+    @Inject
+    private WeatherAPI(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
         log.debug("Weather API starting");
     }
 
@@ -86,13 +95,13 @@ public class WeatherAPI {
                     .addQueryParameter("cnt", "10")
                     .build();
 
-            OkHttpClient client = new OkHttpClient();
             Request getRequest = new Request.Builder()
                     .url(httpUrl)
+                    .header("User-Agent", RuneLite.USER_AGENT + " (rl-weather")
                     .header("x-api-key", apiKey)
                     .build();
 
-            client.newCall(getRequest).enqueue(new Callback() {
+            okHttpClient.newCall(getRequest).enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     log.info(call.toString(), response.body().toString());
