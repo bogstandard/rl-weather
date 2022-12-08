@@ -31,9 +31,20 @@ public interface RlweatherConfig extends Config
 	{
 		return false;
 	}
-
+	
 	@ConfigItem(
 			position = 3,
+			keyName = "thunderenabled",
+			name = "Thunder Enabled",
+			description = "Is it really horrendous out?"
+	)
+	default boolean thunderEnabled()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+			position = 4,
 			keyName = "lightningfrequency",
 			name = "Lightning Frequency (WARNING BRIGHT FLASHES)",
 			description = "The rough frequency of the lightning in ticks"
@@ -44,7 +55,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 4,
+			position = 5,
 			keyName = "lightningcolor",
 			name = "Lightning Color",
 			description = "The color of the lightning"
@@ -57,7 +68,7 @@ public interface RlweatherConfig extends Config
 
 	// RAIN
 	@ConfigItem(
-			position = 5,
+			position = 6,
 			keyName = "rainenabled",
 			name = "Rain Enabled",
 			description = "Is it raining?"
@@ -68,7 +79,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 6,
+			position = 7,
 			keyName = "raincolor",
 			name = "Rain Color",
 			description = "The color of the rain"
@@ -79,7 +90,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 7,
+			position = 8,
 			keyName = "rainthickness",
 			name = "Rain Thickness",
 			description = "The thickness of the rain"
@@ -90,7 +101,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 8,
+			position = 9,
 			keyName = "rainwind",
 			name = "Rain Wind Speed",
 			description = "The wind affecting the rain"
@@ -101,7 +112,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 9,
+			position = 10,
 			keyName = "raingravity",
 			name = "Rain Gravity",
 			description = "The speed of the rain"
@@ -112,7 +123,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 10,
+			position = 11,
 			keyName = "raindiv",
 			name = "Rain Dither",
 			description = "The dither of the rain (zig-zagging)"
@@ -125,7 +136,7 @@ public interface RlweatherConfig extends Config
 
 	// SNOW
 	@ConfigItem(
-			position = 11,
+			position = 12,
 			keyName = "snowenabled",
 			name = "Snow Enabled",
 			description = "Is it snowing?"
@@ -136,7 +147,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 12,
+			position = 13,
 			keyName = "snowcolor",
 			name = "Snow Color",
 			description = "The color of the snow"
@@ -147,7 +158,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 13,
+			position = 14,
 			keyName = "snowthickness",
 			name = "Snow Thickness",
 			description = "The thickness of the snow"
@@ -158,7 +169,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 14,
+			position = 15,
 			keyName = "snowwind",
 			name = "Snow Wind Speed",
 			description = "The wind affecting the snow"
@@ -169,7 +180,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 15,
+			position = 16,
 			keyName = "snowgravity",
 			name = "Snow Gravity",
 			description = "The speed of the snow"
@@ -180,7 +191,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 16,
+			position = 17,
 			keyName = "snowdiv",
 			name = "Snow Dither",
 			description = "The dither of the snow (zig-zagging)"
@@ -192,7 +203,7 @@ public interface RlweatherConfig extends Config
 
 	// Location Weather
 	@ConfigItem(
-			position = 17,
+			position = 18,
 			keyName = "locationenabled",
 			name = "Real World Location Matching",
 			description = "Match the weather to a real world location?"
@@ -203,7 +214,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 18,
+			position = 19,
 			keyName = "location",
 			name = "Real World Location",
 			description = "City name or Area name, <br>eg. London, UK <br>Changes take effect on click elsewhere"
@@ -214,7 +225,7 @@ public interface RlweatherConfig extends Config
 	}
 
 	@ConfigItem(
-			position = 19,
+			position = 20,
 			keyName = "apiKey",
 			name = "OpenWeatherMap API Key",
 			description = "Required for locational weather. <br>Create free key at openweathermap.org/api"

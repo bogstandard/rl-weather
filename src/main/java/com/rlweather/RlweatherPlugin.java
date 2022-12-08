@@ -88,6 +88,13 @@ public class RlweatherPlugin extends Plugin
 			return config.lightningEnabled();
 		}
 	}
+	private boolean isThunderEnabled() {
+		if(config.locationEnabled()) {
+			return config.thunderEnabled() && weatherAPI.isThundering();
+		} else {
+			return config.thunderEnabled();
+		}
+	}
 	private boolean isRainEnabled() {
 		if(config.locationEnabled()) {
 			return config.rainEnabled() && weatherAPI.isRaining();
@@ -144,17 +151,19 @@ public class RlweatherPlugin extends Plugin
 		}
 
 		// LIGHTNING
-		if(isLightningEnabled()) {
+		if(isLightningEnabled() || isThunderEnabled()) {
 			if(lastLightning <= 0) {
 				Random r = new Random();
 				if(r.nextInt(20) == 0) { // 1/20 chance of lightning when it hits
-					// set flag to flash lightning
-					PERFORM_LIGHTNING = true;
-
+					if (isLightningEnabled()) {
+						// set flag to flash lightning
+						PERFORM_LIGHTNING = true;
+					}
+					
 					// reset lightning timer
 					lastLightning = config.lightningFrequency();
 
-					// play audio
+					// play audio, thunder always plays regardless of lightning flash
 					if(config.soundsEnabled()) {
 						sound.thunder(KEY_THUNDER);
 					}
