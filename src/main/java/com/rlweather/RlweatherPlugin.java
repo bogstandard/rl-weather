@@ -164,7 +164,8 @@ public class RlweatherPlugin extends Plugin
 					lastLightning = config.lightningFrequency();
 
 					// play audio, thunder always plays regardless of lightning flash
-					if(config.soundsEnabled()) {
+					// but only if its activated, to avoid confusion
+					if(config.soundsEnabled() && isThunderEnabled()) {
 						sound.thunder(KEY_THUNDER);
 					}
 				}
