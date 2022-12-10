@@ -25,7 +25,7 @@ public interface RlweatherConfig extends Config
 			position = 2,
 			keyName = "lightningenabled",
 			name = "Lightning Enabled",
-			description = "Is it really horrendous out?"
+			description = "Is it really horrendous out? (Lightning Flashes)"
 	)
 	default boolean lightningEnabled()
 	{
@@ -36,7 +36,7 @@ public interface RlweatherConfig extends Config
 			position = 3,
 			keyName = "thunderenabled",
 			name = "Thunder Enabled",
-			description = "Is it really horrendous out?"
+			description = "Is it really horrendous out? (Thunder Sounds)"
 	)
 	default boolean thunderEnabled()
 	{
