@@ -35,13 +35,12 @@ public class WeatherAPI {
     private boolean isThundering = false;
     private Optional<Boolean> isHealthy = Optional.empty();
     private OkHttpClient okHttpClient;
-
-    @Inject
     private Gson gson;
 
     @Inject
-    private WeatherAPI(OkHttpClient okHttpClient) {
+    private WeatherAPI(OkHttpClient okHttpClient, Gson gson) {
         this.okHttpClient = okHttpClient;
+        this.gson = gson;
         log.debug("Weather API starting");
     }
 
@@ -81,7 +80,6 @@ public class WeatherAPI {
     }
 
     // Called on gametick (~0.6 seconds), updates every MAX_STALENESS increment
-    @Inject
     public void update() {
         if(location.equals("") || apiKey.equals("")) {
             return;
