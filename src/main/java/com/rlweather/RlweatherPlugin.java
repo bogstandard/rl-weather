@@ -55,6 +55,7 @@ public class RlweatherPlugin extends Plugin
 	// used to manage the sounds in use
 	protected String KEY_RAIN = "rain";
 	protected String KEY_THUNDER = "thunder";
+	protected String KEY_SNOW = "snow";
 
 	// GENERAL FLAGS
 	public boolean PLAYER_OUTSIDE = false;
@@ -182,6 +183,12 @@ public class RlweatherPlugin extends Plugin
 		if(isSnowEnabled()) {
 			// set flag to make snow
 			PERFORM_SNOW = true;
+			// if not already snowing, begin snow sound
+			if(!sound.isPlaying(KEY_SNOW) && config.soundsEnabled()) {
+				sound.snow(KEY_SNOW);
+			}
+		} else {
+			sound.stop(KEY_SNOW);
 		}
 
 		// SOUNDS

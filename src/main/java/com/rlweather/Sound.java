@@ -31,6 +31,11 @@ public class Sound {
         Clip clip = play(key, thunderSounds[r], false);
         subscribe(key, clip);
     }
+    
+    public void snow(String key) {
+        Clip clip = play(key,"/normalized/201208__rivv3t__raw-wind_edited.wav", true);
+        subscribe(key, clip);
+    }
 
     private void subscribe(String key, Clip clip) {
         clips.put(key, clip);

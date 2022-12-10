@@ -40,6 +40,7 @@ Some of their licences don't require attribution, but I'd like to thank them all
 | Dry Thunder3        | juskiddink              | https://freesound.org/people/juskiddink/sounds/101948/              |
 | Thunder, Close      | Fission9                | https://freesound.org/people/Fission9/sounds/505113/                |
 | Thunder             | MorningGloryProductions | https://freesound.org/people/MorningGloryProductions/sounds/195344/ |
+| raw_wind            | rivv3t                  | https://freesound.org/people/rivv3t/sounds/201208/                  |
 
 The bundled tracks have been normalized, shrunk in size and reduced to mono. The originals above are much higher fidelity!
 
