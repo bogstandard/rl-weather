@@ -37,6 +37,9 @@ public class WeatherAPI {
     private OkHttpClient okHttpClient;
 
     @Inject
+    private Gson gson;
+
+    @Inject
     private WeatherAPI(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
         log.debug("Weather API starting");
@@ -78,6 +81,7 @@ public class WeatherAPI {
     }
 
     // Called on gametick (~0.6 seconds), updates every MAX_STALENESS increment
+    @Inject
     public void update() {
         if(location.equals("") || apiKey.equals("")) {
             return;
@@ -108,7 +112,6 @@ public class WeatherAPI {
 
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
-                            Gson gson = new Gson();
                             WeatherModel weatherModel = gson.fromJson(response.body().string(), WeatherModel.class);
                             isRaining = weatherModel.getWeather().isRainingFromID();
                             isSnowing = weatherModel.getWeather().isSnowingFromID();
