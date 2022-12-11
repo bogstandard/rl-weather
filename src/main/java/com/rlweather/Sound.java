@@ -45,8 +45,7 @@ public class Sound {
         Clip clip = null; // yuck!
 
         try {
-            InputStream is = getClass().getResourceAsStream(soundFilePath);
-            AudioInputStream stream = AudioSystem.getAudioInputStream(is);
+            AudioInputStream stream = AudioSystem.getAudioInputStream(getClass().getResource(soundFilePath));
             clip = AudioSystem.getClip();
 
             // callback once sound is completed
