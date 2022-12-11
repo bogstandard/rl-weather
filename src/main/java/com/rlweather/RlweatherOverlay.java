@@ -1,7 +1,6 @@
 package com.rlweather;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
@@ -10,7 +9,6 @@ import net.runelite.api.Client;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import java.awt.Color;
 
 public class RlweatherOverlay extends Overlay
 {
@@ -87,6 +85,7 @@ public class RlweatherOverlay extends Overlay
     private void renderDrops(List<Drop> drops, Dimension c, Graphics2D g, String type) {
 
         // drop attrs
+        int length;
         int thickness;
         Color color;
         int wind;
@@ -94,6 +93,7 @@ public class RlweatherOverlay extends Overlay
         int div;
 
         // default to rain
+        length = config.rainLength();
         thickness = config.rainThickness();
         color = config.rainColor();
         wind = config.rainWind();
@@ -121,19 +121,26 @@ public class RlweatherOverlay extends Overlay
             // if rain draw lines of thickness
             // drawLine(..) has no means of thickness so loop with offset
             if(type.equals("rain")) {
-            for (int i = 0; i <= thickness; i++) {
-                    g.drawLine(drop.x1 + i, drop.y1 + i, drop.x2 + i, drop.y2 + i);
-                }
+                length = length + drop.depth;
+                g.setStroke(new BasicStroke(thickness));
+                g.drawLine(drop.x2, drop.y2, drop.x1, drop.y2 + length);
             }
 
             // if snow draw oval of thickness
             if(type.equals("snow")) {
-                int radius = config.snowThickness() / 2;
+                thickness = thickness + drop.depth;
+                int radius = (thickness / 2);
                 g.fillOval(drop.x1 - radius, drop.y1 - radius, thickness, thickness);
             }
 
             // update positions
             drop.update();
+
+            // reset changables for next drop if modified
+            length = config.rainLength();
+            if(type.equals("snow")) {
+                thickness = config.snowThickness();
+            }
         }
 
         // remove spent drops
