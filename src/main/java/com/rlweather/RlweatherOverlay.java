@@ -23,6 +23,8 @@ public class RlweatherOverlay extends Overlay
 
     // misc
     private double chanceOfSpawn = 0.8;
+    
+    private final Random r = new Random();
 
     @Inject
     public RlweatherOverlay(Client client, RlweatherPlugin plugin, RlweatherConfig config) {
@@ -121,9 +123,10 @@ public class RlweatherOverlay extends Overlay
             // if rain draw lines of thickness
             // drawLine(..) has no means of thickness so loop with offset
             if(type.equals("rain")) {
+                drop.depth = r.nextInt(9); //We need a higher depth possibility for rain.
                 length = length + drop.depth;
                 g.setStroke(new BasicStroke(thickness));
-                g.drawLine(drop.x2, drop.y2, drop.x1, drop.y2 + length);
+                g.drawLine(drop.x1, drop.y1, drop.x2, drop.y2 + length);
             }
 
             // if snow draw oval of thickness
