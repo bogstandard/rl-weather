@@ -3,6 +3,7 @@ package com.rlweather;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import javax.inject.Inject;
 
 import net.runelite.api.Client;
@@ -126,7 +127,7 @@ public class RlweatherOverlay extends Overlay
                 drop.depth = r.nextInt(9); //We need a higher depth possibility for rain.
                 length = length + drop.depth;
                 g.setStroke(new BasicStroke(thickness));
-                g.drawLine(drop.x1, drop.y1, drop.x2, drop.y2 + length);
+                g.drawLine(drop.x2, drop.y2, drop.x1, drop.y2 + length);
             }
 
             // if snow draw oval of thickness
