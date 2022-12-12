@@ -25,9 +25,12 @@ It *should* pause when you go inside.
 Currently the sound effects are broken on the plugin-hub production build, but work when in development. If anyone's able to assist with this problem, please get involved! I'm at a loss & reckon there's something obvious I'm missing.
 
 ## Recent Activity & Future Plans
+- More depth has been given to droplets
+- Snow sound effects!
+- Lightning & Thunder have been split
+- The repo is alive again
 - **Broken sound effects** are being fixed (slowly), **help is really wanted here.**.
 - **in-game location matching** is being considered, eg. Barbarian Village should be rainy.
-- **3D style droplets** is being experimented with, please refer to the [Issue thread](https://github.com/bogstandard/rl-weather/issues/9#issue-1162733353)
 
 
 ## Sound Credits
