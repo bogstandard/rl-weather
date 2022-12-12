@@ -20,6 +20,7 @@ public class Drop {
     int wind;
     int gravity;
     int div;
+    int depth;
 
     public Drop(int width, Color color, int wind, int gravity, int div) {
         Random r = new Random();
@@ -31,6 +32,7 @@ public class Drop {
         this.wind = wind;
         this.gravity = gravity;
         this.div = div;
+        this.depth = r.nextInt(4) + 1; // higher = closed to camera
     }
 
     public void update() {
@@ -45,6 +47,10 @@ public class Drop {
             this.x1 += r.nextInt(this.div + this.div) - this.div; // -div to div
         }
 
-        this.y1 += this.gravity;
+        int adv = this.gravity + (this.depth / 3);
+        if (this.gravity > 0 && adv <= 0) {
+            adv = 1;
+        }
+        this.y1 += adv;
     }
 }
