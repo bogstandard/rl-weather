@@ -51,3 +51,6 @@ The bundled tracks have been normalized, shrunk in size and reduced to mono. The
 This plugin was created by [BogStandard](https://github.com/bogstandard).
 
 The Runescape from my childhood had weather, I'm sure of it. 
+
+## 3D Weather
+If you're after more 3D effects checkout the excellent [3D Weather](https://runelite.net/plugin-hub/show/3d-weather) plugin!
