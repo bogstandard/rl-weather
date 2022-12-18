@@ -20,9 +20,10 @@ public class Drop {
     int wind;
     int gravity;
     int div;
+    boolean depthEnabled;
     int depth;
 
-    public Drop(int width, Color color, int wind, int gravity, int div) {
+    public Drop(int width, Color color, int wind, int gravity, int div, boolean depthEnabled) {
         Random r = new Random();
         this.x1 = r.nextInt(width + (width/2)) - (width/2); // -width/2 to width, java lol
         this.y1 = 0;
@@ -32,7 +33,8 @@ public class Drop {
         this.wind = wind;
         this.gravity = gravity;
         this.div = div;
-        this.depth = r.nextInt(4) + 1; // higher = closed to camera
+        this.depthEnabled = depthEnabled;
+        this.depth = r.nextInt(3) + 1; // higher = closed to camera
     }
 
     public void update() {
@@ -47,7 +49,12 @@ public class Drop {
             this.x1 += r.nextInt(this.div + this.div) - this.div; // -div to div
         }
 
-        int adv = this.gravity + (this.depth / 3);
+        int adv = this.gravity;
+
+        if (this.depthEnabled) {
+            adv = adv  + (this.depth / 3);
+        }
+
         if (this.gravity > 0 && adv <= 0) {
             adv = 1;
         }

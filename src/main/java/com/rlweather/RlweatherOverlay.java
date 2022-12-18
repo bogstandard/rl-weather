@@ -72,8 +72,8 @@ public class RlweatherOverlay extends Overlay
      * Adds a new Drop instance to the given List<Drop>
      *
      */
-    private void addDrop(List<Drop> list, int width, Color color, int wind, int gravity, int div) {
-        list.add(new Drop(width, color, wind, gravity, div));
+    private void addDrop(List<Drop> list, int width, Color color, int wind, int gravity, int div, boolean depthEnabled) {
+        list.add(new Drop(width, color, wind, gravity, div, depthEnabled));
     }
 
     /**
@@ -114,7 +114,7 @@ public class RlweatherOverlay extends Overlay
 
         // maybe add new drop this frame
         if (Math.random() < chanceOfSpawn) {
-            addDrop(drops, c.width, color, wind, gravity, div);
+            addDrop(drops, c.width, color, wind, gravity, div, config.depthEnabled());
         }
 
         // loop existing Drops
@@ -124,15 +124,23 @@ public class RlweatherOverlay extends Overlay
             // if rain draw lines of thickness
             // drawLine(..) has no means of thickness so loop with offset
             if(type.equals("rain")) {
-                drop.depth = r.nextInt(9); //We need a higher depth possibility for rain.
-                length = length + drop.depth;
+
+                if(config.depthEnabled()) {
+                    drop.depth = r.nextInt(9); //We need a higher depth possibility for rain.
+                    length = length + drop.depth;
+                }
+
                 g.setStroke(new BasicStroke(thickness));
                 g.drawLine(drop.x2, drop.y2, drop.x1, drop.y2 + length);
             }
 
             // if snow draw oval of thickness
             if(type.equals("snow")) {
-                thickness = thickness + drop.depth;
+
+                if(config.depthEnabled()) {
+                    thickness = thickness + drop.depth;
+                }
+
                 int radius = (thickness / 2);
                 g.fillOval(drop.x1 - radius, drop.y1 - radius, thickness, thickness);
             }
