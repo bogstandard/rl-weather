@@ -113,10 +113,16 @@ public class RlweatherPlugin extends Plugin
 
 	@Subscribe
 	private void onConfigChanged(ConfigChanged event) {
-		if (!event.getGroup().equals("Weather") || !config.locationEnabled()) {
+		if (!event.getGroup().equals("Weather")) {
 			return;
 		}
-
+		
+		if (event.getKey().equals("soundvolume")) {
+			sound.stopAll(); //Replay the sound on the next tick with the new volume level.
+		}
+		if (!config.locationEnabled()) {
+			return;
+		}
 		if (event.getKey().equals("locationenabled") ||
 			event.getKey().equals("location") ||
 			event.getKey().equals("apiKey") ) {
@@ -167,7 +173,7 @@ public class RlweatherPlugin extends Plugin
 					// play audio, thunder always plays regardless of lightning flash
 					// but only if its activated, to avoid confusion
 					if(config.soundsEnabled() && isThunderEnabled()) {
-						sound.thunder(KEY_THUNDER);
+						sound.thunder(KEY_THUNDER, config.soundVolume());
 					}
 				}
 			}
@@ -182,7 +188,7 @@ public class RlweatherPlugin extends Plugin
 			PERFORM_RAIN = true;
 			// if not already raining, begin rain sound
 			if(!sound.isPlaying(KEY_RAIN) && config.soundsEnabled()) {
-				sound.rain(KEY_RAIN);
+				sound.rain(KEY_RAIN, config.soundVolume());
 			}
 		}
 		else {
@@ -195,7 +201,7 @@ public class RlweatherPlugin extends Plugin
 			PERFORM_SNOW = true;
 			// if not already snowing, begin snow sound
 			if(!sound.isPlaying(KEY_SNOW) && config.soundsEnabled()) {
-				sound.snow(KEY_SNOW);
+				sound.snow(KEY_SNOW, config.soundVolume());
 			}
 		} else {
 			sound.stop(KEY_SNOW);
