@@ -1,8 +1,6 @@
 package com.rlweather;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -14,8 +12,6 @@ import javax.sound.sampled.*;
 
 @Slf4j
 public class Sound {
-    
-    private static final Logger logger = LoggerFactory.getLogger(Sound.class);
 
     private final HashMap<String, Clip> clips = new HashMap<String, Clip>();
 
@@ -70,7 +66,7 @@ public class Sound {
                 //System.out.println("Setting rl-weather volume to " + vol + " dB");
                 gainControl.setValue(vol);
             } catch (IllegalArgumentException e) {
-                logger.error("It seems like gain control may not be supported on your system: ", e);
+                log.error("It seems like gain control may not be supported on your system: ", e);
             }
             clip.start();
 
