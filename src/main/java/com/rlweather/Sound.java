@@ -1,6 +1,7 @@
 package com.rlweather;
 
 import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -14,12 +15,12 @@ public class Sound {
 
     private final HashMap<String, Clip> clips = new HashMap<String, Clip>();
 
-    public void rain(String key) {
-        Clip clip = play(key,"/normalized/177479__unfa__slowly-raining-loop-3.wav", true);
+    public void rain(String key, int volume) {
+        Clip clip = play(key,"/normalized/177479__unfa__slowly-raining-loop-3.wav", true, volume);
         subscribe(key, clip);
     }
 
-    public void thunder(String key) {
+    public void thunder(String key, int volume) {
         String[] thunderSounds = {
                 "/normalized/195344__morninggloryproductions__thunder-2.wav",
                 "/normalized/352574__dobroide__20160816-thunder-03-2.wav",
@@ -28,12 +29,12 @@ public class Sound {
 
         int r = new Random().nextInt(thunderSounds.length);
 
-        Clip clip = play(key, thunderSounds[r], false);
+        Clip clip = play(key, thunderSounds[r], false, volume);
         subscribe(key, clip);
     }
     
-    public void snow(String key) {
-        Clip clip = play(key,"/normalized/201208__rivv3t__raw-wind_edited.wav", true);
+    public void snow(String key, int volume) {
+        Clip clip = play(key,"/normalized/201208__rivv3t__raw-wind_edited.wav", true, volume);
         subscribe(key, clip);
     }
 
@@ -41,7 +42,7 @@ public class Sound {
         clips.put(key, clip);
     }
 
-    public Clip play(String key, String soundFilePath, boolean loop) {
+    public Clip play(String key, String soundFilePath, boolean loop, int volume) {
         Clip clip = null; // yuck!
 
         try {
@@ -55,8 +56,18 @@ public class Sound {
                     clips.remove(key);
                 }
             });
-
             clip.open(stream);
+            try {
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                if (volume == 100) {
+                    volume = 99;
+                }
+                float vol = (float) (10 * Math.log10((float) volume / 100));
+                //System.out.println("Setting rl-weather volume to " + vol + " dB");
+                gainControl.setValue(vol);
+            } catch (IllegalArgumentException e) {
+                log.error("It seems like gain control may not be supported on your system: ", e);
+            }
             clip.start();
 
             if(loop) {
