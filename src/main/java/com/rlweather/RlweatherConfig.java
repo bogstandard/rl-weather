@@ -34,7 +34,7 @@ public interface RlweatherConfig extends Config
 	)
 	default int soundVolume()
 	{
-		return 50;
+		return 25;
 	}
 
 	@ConfigItem(
